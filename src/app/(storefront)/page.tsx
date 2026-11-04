@@ -35,16 +35,15 @@ export default async function HomePage() {
   const featuredProducts = await getFeaturedProducts();
 
   return (
-    <div className="flex flex-col min-h-screen overflow-x-hidden">
+    <div className="home-page flex flex-col min-h-screen overflow-x-hidden">
 
       {/* ════════════════════════════════════
           1. HERO
          ════════════════════════════════════ */}
       <section
-        className="relative text-white overflow-hidden"
+        className="home-hero relative text-white overflow-hidden"
         style={{
           background: 'linear-gradient(135deg, #3A0D18 0%, #681C2D 45%, #8B2B3F 100%)',
-          minHeight: '92vh',
           display: 'flex',
           alignItems: 'center',
         }}
@@ -74,11 +73,11 @@ export default async function HomePage() {
           </svg>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-20 lg:py-28 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        <div className="site-container home-hero__inner relative z-10 w-full">
+          <div className="home-hero__grid grid grid-cols-1 lg:grid-cols-12 items-center">
 
             {/* Left copy */}
-            <div className="lg:col-span-7 space-y-8">
+            <div className="home-hero__copy lg:col-span-7 space-y-8">
               <div className="animate-fade-up">
                 <div
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold uppercase tracking-widest"
@@ -111,7 +110,7 @@ export default async function HomePage() {
                 {COPY.heroSubtext}
               </p>
 
-              <div className="flex flex-wrap gap-4 pt-2 animate-fade-up delay-300">
+              <div className="home-actions flex flex-wrap gap-4 pt-2 animate-fade-up delay-300">
                 <Link
                   href="/products"
                   className="group relative inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-sm shadow-xl hover:shadow-2xl hover:opacity-90 transition-all duration-200"
@@ -131,7 +130,7 @@ export default async function HomePage() {
 
               {/* Trust strip */}
               <div
-                className="pt-8 border-t grid grid-cols-3 gap-x-6 gap-y-4 text-xs animate-fade-up delay-400"
+                className="home-trust pt-8 border-t grid grid-cols-3 gap-x-6 gap-y-4 text-xs animate-fade-up delay-400"
                 style={{ borderColor: 'rgba(255,255,255,0.10)', color: 'rgba(237,228,214,0.75)' }}
               >
                 {[
@@ -251,8 +250,8 @@ export default async function HomePage() {
           3. SHOP BY CATEGORY
          ════════════════════════════════════ */}
       <section className="section-py" style={{ background: '#FAF7F0' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-14 animate-fade-up">
+        <div className="site-container">
+          <div className="section-heading text-center max-w-2xl mx-auto animate-fade-up">
             <div
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest mb-4"
               style={{ background: 'rgba(184,149,90,0.12)', color: '#9A7A45' }}
@@ -268,12 +267,12 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div className="category-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {CATEGORIES.map((cat, i) => (
               <Link
                 key={cat.slug}
                 href={`/categories/${cat.slug}`}
-                className="group flex flex-col items-center justify-center gap-3 p-5 rounded-2xl text-center animate-fade-up bg-white border border-[#EDE4D6] hover:border-[#B8955A] hover:shadow-lg transition-all duration-300"
+                className="category-card group flex flex-col items-center justify-center gap-3 p-5 rounded-2xl text-center animate-fade-up bg-white border border-[#EDE4D6] hover:border-[#B8955A] hover:shadow-lg transition-all duration-300"
                 style={{ animationDelay: `${i * 60}ms` }}
               >
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300 bg-gradient-to-br from-[#FAF7F0] to-[#EDE4D6]">
@@ -293,8 +292,8 @@ export default async function HomePage() {
           4. FEATURED PRODUCTS
          ════════════════════════════════════ */}
       <section className="section-py" style={{ background: '#fff', borderTop: '1px solid #EDE4D6' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-14">
+        <div className="site-container">
+          <div className="section-header flex flex-col md:flex-row md:items-end justify-between">
             <div className="animate-fade-up">
               <div
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest mb-4"
@@ -317,7 +316,7 @@ export default async function HomePage() {
           </div>
 
           {featuredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="product-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
               {featuredProducts.map((p: any, i: number) => (
                 <ProductCard key={p._id} product={p} animationDelay={i * 80} />
               ))}
@@ -362,8 +361,8 @@ export default async function HomePage() {
           style={{ backgroundImage: 'radial-gradient(#681C2D 1px, transparent 1px)', backgroundSize: '24px 24px' }}
         />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-2xl mx-auto mb-14 animate-fade-up">
+        <div className="site-container relative z-10">
+          <div className="section-heading text-center max-w-2xl mx-auto animate-fade-up">
             <div
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest mb-4"
               style={{ background: 'rgba(184,149,90,0.15)', color: '#9A7A45' }}
@@ -379,11 +378,11 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="feature-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {FESTIVALS.slice(0, 4).map((f, i) => (
               <div
                 key={f.slug}
-                className="group relative bg-white rounded-2xl p-7 flex flex-col justify-between overflow-hidden border border-[#EDE4D6] hover:border-[#B8955A] hover:shadow-xl transition-all duration-300 animate-fade-up"
+                className="festival-card group relative bg-white rounded-2xl p-7 flex flex-col justify-between overflow-hidden border border-[#EDE4D6] hover:border-[#B8955A] hover:shadow-xl transition-all duration-300 animate-fade-up"
                 style={{ animationDelay: `${i * 100}ms` }}
               >
                 {/* Top accent line revealed on hover */}
@@ -432,8 +431,8 @@ export default async function HomePage() {
           6. HERITAGE / ABOUT AJAY PACKERS
          ════════════════════════════════════ */}
       <section className="section-py" style={{ background: '#fff', borderTop: '1px solid #EDE4D6' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="site-container">
+          <div className="home-heritage grid grid-cols-1 lg:grid-cols-2 items-center">
 
             <div className="space-y-7 animate-slide-left">
               <div>
@@ -538,7 +537,7 @@ export default async function HomePage() {
           7. WHOLESALE CTA BANNER
          ════════════════════════════════════ */}
       <section
-        className="relative py-20 overflow-hidden"
+        className="home-cta relative overflow-hidden"
         style={{ background: 'linear-gradient(135deg,#3A0D18 0%,#681C2D 50%,#8B2B3F 100%)' }}
       >
         <div
@@ -550,7 +549,7 @@ export default async function HomePage() {
           style={{ background: 'radial-gradient(ellipse 60% 60% at 50% 50%, #B8955A 0%, transparent 70%)' }}
         />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-8">
+        <div className="site-container relative z-10 text-center space-y-8">
           <div className="animate-fade-up">
             <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 border"

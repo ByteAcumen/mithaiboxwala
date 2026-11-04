@@ -71,18 +71,6 @@ export function ProductCard({ product, animationDelay = 0 }: ProductCardProps) {
       className="product-card group relative bg-white border border-[#EDE4D6] rounded-2xl overflow-hidden flex flex-col animate-fade-up"
       style={{
         animationDelay: `${animationDelay}ms`,
-        transition: 'box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(0.22,1,0.36,1)',
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLDivElement).style.boxShadow =
-          '0 12px 40px rgba(104,28,45,0.12), 0 2px 8px rgba(104,28,45,0.06)';
-        (e.currentTarget as HTMLDivElement).style.borderColor = '#B8955A';
-        (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)';
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLDivElement).style.boxShadow = '';
-        (e.currentTarget as HTMLDivElement).style.borderColor = '#EDE4D6';
-        (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)';
       }}
     >
       {/* ── Image ── */}
@@ -161,7 +149,7 @@ export function ProductCard({ product, animationDelay = 0 }: ProductCardProps) {
       </Link>
 
       {/* ── Details ── */}
-      <div className="p-4 flex-1 flex flex-col justify-between">
+      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
         <div>
           {product.category?.name && (
             <p className="text-[10px] font-bold tracking-widest text-[#B8955A] uppercase mb-1">
@@ -170,7 +158,7 @@ export function ProductCard({ product, animationDelay = 0 }: ProductCardProps) {
           )}
           <Link href={`/products/${product.slug}`}>
             <h3
-              className="font-display text-[15px] font-semibold leading-snug transition-colors duration-200 line-clamp-2"
+              className="product-card__title font-display text-[15px] font-semibold leading-snug transition-colors duration-200 line-clamp-2"
               style={{ color: '#24211F' }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLHeadingElement).style.color = '#681C2D'; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLHeadingElement).style.color = '#24211F'; }}
@@ -202,7 +190,7 @@ export function ProductCard({ product, animationDelay = 0 }: ProductCardProps) {
           <button
             onClick={handleAddToCart}
             disabled={addingToCart}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-250"
+            className="product-card__add flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-250"
             style={{
               background: addingToCart
                 ? '#681C2D'

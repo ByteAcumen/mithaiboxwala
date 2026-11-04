@@ -68,7 +68,7 @@ export async function generateAndStoreOTP(email: string): Promise<{
 export async function verifyOTP(
   email: string,
   otp: string,
-  profile?: { name?: string; phone?: string }
+  profile?: { name?: string; phone?: string; company?: string }
 ): Promise<OTPVerifyResult> {
   await connectDB();
 
@@ -111,8 +111,15 @@ export async function verifyOTP(
     return { success: false, error: 'invalid' };
   }
 
-  // Mark OTP as used
-  await OTPChallenge.updateOne({ _id: challenge._id }, { isUsed: true });
+  // Claim the challenge atomically so an OTP can never create multiple sessions.
+  const claimedChallenge = await OTPChallenge.findOneAndUpdate(
+    { _id: challenge._id, isUsed: false },
+    { $set: { isUsed: true } },
+    { new: true }
+  );
+  if (!claimedChallenge) {
+    return { success: false, error: 'already_used' };
+  }
 
   // Find or create user
   let user = await User.findOne({ email: normalizedEmail });
@@ -123,6 +130,7 @@ export async function verifyOTP(
       email: normalizedEmail,
       name: profile?.name?.trim() || undefined,
       phone: profile?.phone?.trim() || undefined,
+      company: profile?.company?.trim() || undefined,
       isActive: true,
       emailVerified: true,
     });
@@ -131,6 +139,7 @@ export async function verifyOTP(
     const updateObj: Record<string, unknown> = { emailVerified: true, lastLoginAt: new Date() };
     if (profile?.name?.trim() && !user.name) updateObj.name = profile.name.trim();
     if (profile?.phone?.trim() && !user.phone) updateObj.phone = profile.phone.trim();
+    if (profile?.company?.trim() && !user.company) updateObj.company = profile.company.trim();
     await User.updateOne({ _id: user._id }, updateObj);
   }
 

@@ -1,29 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { nanoid } from 'nanoid';
 import { getCustomerSession, revokeCustomerSession, clearCustomerSessionCookie } from '@/lib/auth/session';
+import { isTrustedMutation } from '@/lib/security/request';
 
-export async function POST(_request: NextRequest) {
+export async function POST(request: NextRequest) {
   const requestId = nanoid(10);
 
+  if (!isTrustedMutation(request)) {
+    return NextResponse.json({ success: false, error: 'Invalid request origin', requestId }, { status: 403 });
+  }
+
   try {
-    // Attempt to get and revoke the current session
     const session = await getCustomerSession();
-
-    if (session?.sessionId) {
-      await revokeCustomerSession(session.sessionId);
-    }
-
-    // Always clear the cookie regardless of session validity
+    if (session?.sessionId) await revokeCustomerSession(session.sessionId);
     await clearCustomerSessionCookie();
-
     return NextResponse.json({ success: true }, { status: 200 });
-  } catch (err) {
-    console.error('[POST /api/auth/logout] Unexpected error:', err);
-    // Still clear the cookie on error
+  } catch (error) {
+    console.error('[POST /api/auth/logout] Unexpected error:', error);
     try {
       await clearCustomerSessionCookie();
     } catch {
-      // best-effort
+      // Best-effort cookie cleanup.
     }
     return NextResponse.json(
       { success: false, error: 'internal_error', message: 'Logout failed.', requestId },

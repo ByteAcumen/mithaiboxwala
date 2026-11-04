@@ -37,6 +37,7 @@ export const VerifyOTPSchema = z.object({
   otp: z.string().length(6, 'OTP must be 6 digits').regex(/^\d{6}$/, 'OTP must contain only digits'),
   name: z.string().max(100).optional(),
   phone: z.string().max(20).optional(),
+  company: z.string().max(160).optional(),
 });
 
 export const AdminLoginSchema = z.object({

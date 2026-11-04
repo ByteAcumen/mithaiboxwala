@@ -389,3 +389,65 @@ body { background-image: radial-gradient(circle at 8% 0%, rgba(184, 149, 90, 0.0
   transition: opacity .3s ease, transform .35s var(--ease-out-expo);
 }
 .product-card:hover .product-card__quick-view { transform: translateY(0); }
+
+/* Production polish: intentional motion, input feedback, and a refined authentication surface. */
+::selection { background: rgba(104, 28, 45, 0.18); color: var(--burgundy-dark); }
+
+button, a, input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+input, select, textarea {
+  transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 4px rgba(184, 149, 90, 0.14) !important;
+}
+
+.auth-shell::before,
+.auth-shell::after {
+  content: '';
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(2px);
+}
+
+.auth-shell::before {
+  width: 28rem;
+  height: 28rem;
+  left: -15rem;
+  bottom: -16rem;
+  background: radial-gradient(circle, rgba(104, 28, 45, 0.11), transparent 68%);
+}
+
+.auth-shell::after {
+  width: 20rem;
+  height: 20rem;
+  right: -9rem;
+  top: 18%;
+  background: radial-gradient(circle, rgba(184, 149, 90, 0.16), transparent 70%);
+}
+
+.auth-card {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+@media (hover: hover) {
+  .auth-card:hover {
+    transform: translateY(-3px) translateZ(0);
+    box-shadow: 0 30px 80px rgba(36, 33, 31, 0.14), 0 8px 22px rgba(184, 149, 90, 0.12) !important;
+  }
+
+  .product-card:hover img {
+    filter: saturate(1.04) contrast(1.02);
+  }
+}
+
+@media (pointer: coarse) {
+  .marquee-track { animation-play-state: paused; }
+  .card:hover, .product-card:hover { transform: none; }
+}

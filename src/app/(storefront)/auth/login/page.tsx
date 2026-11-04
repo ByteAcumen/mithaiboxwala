@@ -23,7 +23,10 @@ import { BUSINESS } from '@/lib/constants';
 export default function AuthPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const returnUrl = searchParams.get('returnUrl') || '/account';
+  const requestedReturnUrl = searchParams.get('returnUrl');
+  const returnUrl = requestedReturnUrl?.startsWith('/') && !requestedReturnUrl.startsWith('//')
+    ? requestedReturnUrl
+    : '/account';
   const initialMode = searchParams.get('mode') === 'signup' ? 'signup' : 'login';
 
   // Tabs: 'login' | 'signup'
@@ -153,6 +156,7 @@ export default function AuthPage() {
           otp: code,
           name: name.trim() || undefined,
           phone: phone.trim() || undefined,
+          company: company.trim() || undefined,
         }),
       });
 
@@ -165,7 +169,7 @@ export default function AuthPage() {
 
       // Buttery smooth redirect after celebratory checkmark
       setTimeout(() => {
-        router.push(returnUrl);
+        router.replace(returnUrl);
       }, 1200);
     } catch (err: any) {
       setError(err.message || 'Verification failed. Please check your code.');
@@ -176,6 +180,7 @@ export default function AuthPage() {
 
   return (
     <div
+      className="auth-shell"
       style={{
         minHeight: '88vh',
         display: 'flex',
@@ -214,6 +219,7 @@ export default function AuthPage() {
       />
 
       <div
+        className="auth-card animate-scale-in"
         style={{
           maxWidth: 460,
           width: '100%',
@@ -681,6 +687,7 @@ export default function AuthPage() {
                     }}
                     type="text"
                     inputMode="numeric"
+                    autoComplete={i === 0 ? 'one-time-code' : 'off'}
                     maxLength={1}
                     value={digit}
                     onChange={(e) => handleOtpChange(i, e.target.value)}

@@ -4,6 +4,10 @@ import type { NextRequest } from 'next/server';
 const CUSTOMER_COOKIE_NAME = 'mb_session';
 const ADMIN_COOKIE_NAME = 'mb_admin_session';
 
+function getSafeInternalPath(value: string | null, fallback: string): string {
+  return value?.startsWith('/') && !value.startsWith('//') ? value : fallback;
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const requestId = crypto.randomUUID();
@@ -36,7 +40,7 @@ export function middleware(request: NextRequest) {
 
   // 3. Prevent authenticated users from getting stuck on login page
   if (pathname === '/auth/login' && request.cookies.get(CUSTOMER_COOKIE_NAME)?.value) {
-    const returnUrl = request.nextUrl.searchParams.get('returnUrl') || '/account';
+    const returnUrl = getSafeInternalPath(request.nextUrl.searchParams.get('returnUrl'), '/account');
     return NextResponse.redirect(new URL(returnUrl, request.url));
   }
 

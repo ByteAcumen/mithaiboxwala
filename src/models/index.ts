@@ -7,6 +7,7 @@ export interface IUser extends Document {
   email: string;
   name?: string;
   phone?: string;
+  company?: string;
   isActive: boolean;
   emailVerified: boolean;
   createdAt: Date;
@@ -28,6 +29,7 @@ const UserSchema = new Schema<IUser>(
     },
     name: { type: String, trim: true, maxlength: 100 },
     phone: { type: String, trim: true },
+    company: { type: String, trim: true, maxlength: 160 },
     isActive: { type: Boolean, default: true },
     emailVerified: { type: Boolean, default: false },
     lastLoginAt: { type: Date },
@@ -135,6 +137,23 @@ const OTPChallengeSchema = new Schema<IOTPChallenge>(
   { timestamps: true }
 );
 
+// ============================================================
+// PERSISTENT RATE LIMIT BUCKET MODEL
+// ============================================================
+export interface IRateLimitBucket extends Document {
+  fingerprint: string;
+  count: number;
+  expiresAt: Date;
+}
+
+const RateLimitBucketSchema = new Schema<IRateLimitBucket>(
+  {
+    fingerprint: { type: String, required: true, unique: true, index: true },
+    count: { type: Number, required: true, default: 0 },
+    expiresAt: { type: Date, required: true, index: { expireAfterSeconds: 0 } },
+  },
+  { timestamps: false }
+);
 // ============================================================
 // CATEGORY MODEL
 // ============================================================
@@ -547,6 +566,7 @@ export interface IOrder extends Document {
     name: string;
     email: string;
     phone?: string;
+  company?: string;
   };
   shippingAddressSnapshot: {
     fullName: string;
@@ -968,6 +988,7 @@ export const User = getModel<IUser>('User', UserSchema);
 export const AdminUser = getModel<IAdminUser>('AdminUser', AdminUserSchema);
 export const Session = getModel<ISession>('Session', SessionSchema);
 export const OTPChallenge = getModel<IOTPChallenge>('OTPChallenge', OTPChallengeSchema);
+export const RateLimitBucket = getModel<IRateLimitBucket>('RateLimitBucket', RateLimitBucketSchema);
 export const Category = getModel<ICategory>('Category', CategorySchema);
 export const Product = getModel<IProduct>('Product', ProductSchema);
 export const ProductVariant = getModel<IProductVariant>('ProductVariant', ProductVariantSchema);

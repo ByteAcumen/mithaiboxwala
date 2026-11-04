@@ -7,6 +7,8 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
+    "syntaxcheck": "node --max-old-space-size=2048 ./node_modules/typescript/bin/tsc --project tsconfig.syntax.json",
+    "audit": "pnpm audit --audit-level=high",
     "test": "vitest run",
     "seed": "npx tsx scripts/seed.ts",
     "bootstrap:admin": "npx tsx scripts/bootstrap-admin.ts"

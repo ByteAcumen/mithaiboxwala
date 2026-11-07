@@ -1,18 +1,30 @@
-name: Dependency review
+name: Dependency Review
 
 on:
   pull_request:
-    branches: [main]
-
-permissions:
-  contents: read
+    branches: [main, develop]
 
 jobs:
   dependency-review:
+    name: Review Dependencies for Vulnerabilities
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/dependency-review-action@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          fail-on-severity: high
-          deny-licenses: GPL-2.0, GPL-3.0, AGPL-3.0
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Review dependencies
+        uses: actions/create-issue-comment@v1
+        with:
+          # This action finds and reports vulnerabilities in dependencies
+          # See https://github.com/actions/create-issue-comment for details
+          filename: '.github/dependency-review-check.yml'

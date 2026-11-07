@@ -28,15 +28,18 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  // The existing Mongoose/Next type graph exceeds the build worker memory limit.
-  // CI runs tsconfig.syntax.json to catch project-wide TypeScript syntax errors.
   typescript: { ignoreBuildErrors: true },
   images: {
     remotePatterns: [{ protocol: 'https', hostname: '**' }],
     dangerouslyAllowSVG: false,
   },
   async headers() {
-    return [{ source: '/(.*)', headers: securityHeaders }];
+    return [
+      {
+        source: '/(.*)',
+        headers: securityHeaders,
+      },
+    ];
   },
 };
 

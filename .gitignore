@@ -44,3 +44,9 @@ next-env.d.ts
 # playwright temp logs
 .playwright-cli/
 /output/playwright/
+
+# Dev output logs
+/output/
+
+# Agents config
+AGENTS.md

@@ -1,0 +1,80 @@
+stages:
+  - lint
+  - typecheck
+  - test
+  - security
+
+variables:
+  # Use Node 20 LTS
+  NODE_VERSION: "20"
+  # Cache node modules between jobs
+  CACHE_KEY: "${CI_COMMIT_REF_SLUG}"
+  # Disable image scanning for faster local development
+  # DOCKER_IMAGE: "registry.example.com/mithaiboxes:${CI_COMMIT_SHA}"
+
+lint:
+  stage: lint
+  image:
+    name: node:20-alpine
+    entrypoint: [""]
+  script:
+    - corepack enable
+    - pnpm install --frozen-lockfile
+    - pnpm lint
+  cache:
+    key: lint-cache
+    paths:
+      - .pnpm-store/
+  tags:
+    - docker
+
+typecheck:
+  stage: typecheck
+  image:
+    name: node:20-alpine
+    entrypoint: [""]
+  script:
+    - corepack enable
+    - pnpm install --frozen-lockfile
+    - pnpm syntaxcheck
+  cache:
+    key: typecheck-cache
+    paths:
+      - .pnpm-store/
+  tags:
+    - docker
+
+test:
+  stage: test
+  image:
+    name: node:20-alpine
+    entrypoint: [""]
+  script:
+    - corepack enable
+    - pnpm install --frozen-lockfile
+    - pnpm test
+  cache:
+    key: test-cache
+    paths:
+      - .pnpm-store/
+  artifacts:
+    reports:
+      vitest: test/vitest.coverage.xml
+  tags:
+    - docker
+
+security:
+  stage: security
+  image:
+    name: node:20-alpine
+    entrypoint: [""]
+  script:
+    - corepack enable
+    - pnpm install --frozen-lockfile
+    - pnpm audit --audit-level=high
+  cache:
+    key: security-cache
+    paths:
+      - .pnpm-store/
+  tags:
+    - docker

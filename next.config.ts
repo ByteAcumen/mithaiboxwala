@@ -28,7 +28,7 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  typescript: { ignoreBuildErrors: true },
+  typescript: { strict: true },
   images: {
     remotePatterns: [{ protocol: 'https', hostname: '**' }],
     dangerouslyAllowSVG: false,
